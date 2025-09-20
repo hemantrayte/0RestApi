@@ -3,7 +3,8 @@ conf()
 
 
 const _confing = {
-  port:process.env.PORT
+  port:process.env.PORT,
+  databaseUrl:process.env.MONGODB_URI
 };
 
 export const confing = Object.freeze(_confing)
