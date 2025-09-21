@@ -8,43 +8,48 @@ import { confing } from "../config/config";
 
 const createUser = async(req:Request, res:Response, next:NextFunction) => {
 
-    const {name, email, password} = req.body
-
-    if(!name || !email || !password) {
-      const error = createHttpError(400,"All fields are required")
-      return next(error)
-    }
-
-    const user = await userModel.findOne({email:email})
-
-    if(user) {
-      const error = createHttpError(400,"User already exist with this email")
-      return next(error)
-    }
-    
-    //password
-    const hashedPassword = await bcrypt.hash(password, 10)
-
-    //create user and save in data base 
-    const newUser = await userModel.create({
-    name,
-    email,
-    password:hashedPassword 
-    })
-
-    //token generation
-    const token = jwt.sign
-    (
-      {sub:newUser._id},
-      confing.jwtSecret as string,
-      {
-        expiresIn:'7d'
+    try {
+      const {name, email, password} = req.body
+  
+      if(!name || !email || !password) {
+        const error = createHttpError(400,"All fields are required")
+        return next(error)
       }
-    )
-    
-    const userNew  = await userModel.findById(newUser._id).select("-password")
+  
+      const user = await userModel.findOne({email:email})
+  
+      if(user) {
+        const error = createHttpError(400,"User already exist with this email")
+        return next(error)
+      }
+      
+      //password
+      const hashedPassword = await bcrypt.hash(password, 10)
+  
+      //create user and save in data base 
+      const newUser = await userModel.create({
+      name,
+      email,
+      password:hashedPassword 
+      })
+  
+      //token generation
+      const token = jwt.sign
+      (
+        {sub:newUser._id},
+        confing.jwtSecret as string,
+        {
+          expiresIn:'7d'
+        }
+      )
+      
+      const userNew  = await userModel.findById(newUser._id).select("-password")
+  
+      res.json({userNew, token})
 
-    res.json({userNew, token})
+    } catch (error) {
+      return next(createHttpError(500, "Error while creating user. "))
+    }
 }
 
 
