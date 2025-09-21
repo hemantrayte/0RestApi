@@ -48,9 +48,51 @@ const createUser = async(req:Request, res:Response, next:NextFunction) => {
       res.json({userNew, token})
 
     } catch (error) {
+      console.log(error)
       return next(createHttpError(500, "Error while creating user. "))
     }
 }
 
 
-export { createUser}
+const loginUser = async(req:Request,res:Response, next:NextFunction) => {
+  try {
+    const {email, password} = req.body
+  
+  if(!email || !password) {
+    const error = createHttpError(400,"All fields are required")
+    return next(error)
+  }
+
+  const user = await userModel.findOne({email:email}).select("-password")
+
+  if(!user) {
+    const error = createHttpError(400,"User Not Found || User Not Exist")
+    return next(error)
+  }
+  
+  const isPasswordCorrect = await bcrypt.compare(user.password, password)
+
+  if(!isPasswordCorrect) {
+    const error = createHttpError(400,"Invalid User Credetails")
+    return next(error)
+  }
+  
+  const token = jwt.sign(
+    {sub:user._id}, 
+    confing.jwtSecret as string, 
+    {expiresIn:"7d"}
+  )
+
+  res.json({user, token})
+
+  } catch (error) {
+    console.log(error)
+    return next(createHttpError(500, "Error while creating user. "))
+  }
+}
+
+
+export { 
+  createUser,
+  loginUser
+}
