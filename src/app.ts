@@ -1,16 +1,15 @@
 import express, { NextFunction } from 'express'
 import globalErrorHandler from './middlewares/globalErrorHandler';
 import userRouter from './user/user.routes';
+import bookRouter from './book/book.routes';
 
 const app = express();
 app.use(express.json())
 
-//Routes
-app.get("/", (req , res) => {
-  res.json({message:"Welcom to my empire"})
-})
 
+//routes
 app.use("/api/users",userRouter)
+app.use("/api/books", bookRouter)
 
 
 //global error handler

@@ -45,7 +45,9 @@ const createUser = async(req:Request, res:Response, next:NextFunction) => {
       
       const userNew  = await userModel.findById(newUser._id).select("-password")
   
-      res.json({userNew, token})
+       res
+      .status(201)
+      .json({userNew, token})
 
     } catch (error) {
       console.log(error)
