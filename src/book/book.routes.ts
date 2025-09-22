@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createBook, getSingleBook, listBook, updateBook } from "./book.controller";
+import { createBook, deleteBook, getSingleBook, listBook, updateBook } from "./book.controller";
 import multer from 'multer'
 import path from "node:path";
 import verifyJWT from "../middlewares/verifyJWT";
@@ -23,6 +23,7 @@ bookRouter.route("/update/:id").patch(verifyJWT, updateBook)
 
 bookRouter.route("/").get(listBook)
 bookRouter.route("/:id").get(getSingleBook)
+bookRouter.route("/delete/:id").delete(deleteBook)
 
 export default bookRouter
 

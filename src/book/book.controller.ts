@@ -69,22 +69,26 @@ const createBook = async(req:Request,res:Response, next:NextFunction) => {
 }
 
 
-// const updateBook = async() => {
+const updateBook = async() => {
 
-// }
+}
 
-// const listBook = async() => {
+const listBook = async() => {
 
-// }
+}
 
-// const getSingleBook = async() => {
+const getSingleBook = async() => {
 
-// }
+}
 
+const deleteBook = async() => {
+
+}
 
 export {
   createBook,
-  // updateBook,
-  // listBook,
-  // getSingleBook
+  updateBook,
+  listBook,
+  getSingleBook,
+  deleteBook
 }
