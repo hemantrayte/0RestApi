@@ -21,7 +21,7 @@ bookRouter.route("/create").post(
 
 bookRouter.route("/update/:id").patch(verifyJWT, updateBook)
 
-// bookRouter.route("/").get(listBook)
+bookRouter.route("/").get(listBook)
 // bookRouter.route("/:id").get(getSingleBook)
 
 export default bookRouter
